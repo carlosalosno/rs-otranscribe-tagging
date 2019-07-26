@@ -38,7 +38,7 @@ function applyLang(callback){
     if(lang) {
         document.webL10n.setLanguage(lang);
     } else {
-        document.webL10n.setLanguage('en');
+        document.webL10n.setLanguage('es');
     }
 }
 

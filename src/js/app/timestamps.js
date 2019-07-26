@@ -1,5 +1,29 @@
 import {getPlayer} from './player/player';
+import {Spinner} from 'spin.js';
 var sha256 = require('js-sha256');
+
+//var option for spinner
+var opts = {
+  lines: 13, // The number of lines to draw
+  length: 38, // The length of each line
+  width: 17, // The line thickness
+  radius: 45, // The radius of the inner circle
+  scale: 1, // Scales overall size of the spinner
+  corners: 1, // Corner roundness (0..1)
+  color: '#ffffff', // CSS color or array of colors
+  fadeColor: 'transparent', // CSS color or array of colors
+  speed: 1, // Rounds per second
+  rotate: 0, // The rotation offset
+  animation: 'spinner-line-fade-quick', // The CSS animation name for the lines
+  direction: 1, // 1: clockwise, -1: counterclockwise
+  zIndex: 2e9, // The z-index (defaults to 2000000000)
+  className: 'spinner', // The CSS class to assign to the spinner
+  top: '50%', // Top position relative to parent
+  left: '50%', // Left position relative to parent
+  shadow: '0 0 1px transparent', // Box-shadow for the lines
+  position: 'absolute' // Element positioning
+};
+
 function getTime(){
     // get timestamp
     const player = getPlayer();
@@ -58,9 +82,6 @@ function sendTebasTimestamp(){
 	var url = new URL(window.location.href);
 	var ref = url.searchParams.get("ref");
 	var metadata = url.searchParams.get("metadata");
-	console.log('Ref: '+ref );
-	console.log('Metadata: '+metadata );
-	console.log('Contenido: '+encodeURIComponent(textBoxContent));
 	var query = "user=admin&function="+"update_field&param1="+ref+"&param2="+metadata+"&param3="+encodeURIComponent(textBoxContent)+"&param4=";
 	//console.log('Test envío: '+ "3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query);
 	var sign = sha256("3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query).toString();
@@ -77,35 +98,6 @@ function sendTebasTimestamp(){
 		alert("Tebas sync failed!");
 	}
 }
-
-// function sendTebasTimestamp(){
-    // var textBoxContent = document.getElementById('textbox').innerHTML;
-	// var url = new URL(window.location.href);
-	// var ref = url.searchParams.get("ref");
-	// console.log(ref);
-	// var resCode = ref.split("?")[0];
-	// console.log(resCode);
-	// var metadata = url.searchParams.get("metadata");
-	// var metadataCode = metadata.split("?")[0];
-	// console.log('Test envío: '+resCode );
-	// console.log('Test envío: '+metadataCode );
-	// var query = "user=admin&function="+"update_field&param1="+resCode+"&param2="+metadataCode+"&param3="+encodeURIComponent(textBoxContent)+"&param4=";
-	// console.log('Test envío: '+ "3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query);
-	// var sign = sha256("3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query).toString();
-	// console.log("SHA = "+ sign);
-	// var xhr = new XMLHttpRequest();
-	// xhr.open("GET", "http://trunk.tebascms.com/api/?"+query+"&sign="+sign, true);
-	
-	// xhr.send(JSON.stringify({
-	// }));
-	// xhr.onload = function() {
-		// alert("Tebas sync complete!");
-	// };
-	// xhr.onerror = function () {
-		// alert("Tebas sync failed!");
-	// }
-// }
-
 
 
 function createTimestampEl(time) {

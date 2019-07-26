@@ -34,7 +34,7 @@ export default function init(){
 
     keyboardShortcutSetup();
 
-    viewController.set('about');
+    viewController.set('editor');
 	
 	getPreviewURL();
 	

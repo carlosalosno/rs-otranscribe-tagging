@@ -57,17 +57,17 @@ function sendTebasTimestamp(){
     var textBoxContent = document.getElementById('textbox').innerHTML;
 	var url = new URL(window.location.href);
 	var ref = url.searchParams.get("ref");
-	var resCode = ref.split("?")[0];
 	var metadata = url.searchParams.get("metadata");
-	var metadataCode = metadata.split("?")[0];
-	// console.log('Test envío: '+resCode );
-	// console.log('Test envío: '+metadataCode );
-	var query = "user=admin&function="+"update_field&param1="+resCode+"&param2="+metadataCode+"&param3="+encodeURIComponent(textBoxContent)+"&param4=";
-	// console.log('Test envío: '+ "707bebafc2d90c88ab3466d293ff7e015a2d2640123efd88cc9b189bcf1f0080"+query);
-	var sign = sha256("707bebafc2d90c88ab3466d293ff7e015a2d2640123efd88cc9b189bcf1f0080"+query).toString();
-	// console.log("SHA = "+ sign);
+	console.log('Ref: '+ref );
+	console.log('Metadata: '+metadata );
+	console.log('Contenido: '+encodeURIComponent(textBoxContent));
+	var query = "user=admin&function="+"update_field&param1="+ref+"&param2="+metadata+"&param3="+encodeURIComponent(textBoxContent)+"&param4=";
+	//console.log('Test envío: '+ "3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query);
+	var sign = sha256("3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query).toString();
+	//console.log("SHA = "+ sign);
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://tebas86.tebascms.com/api/?"+query+"&sign="+sign, true);
+	xhr.open("GET", "http://trunk.tebascms.com/api/?"+query+"&sign="+sign, true);
+	
 	xhr.send(JSON.stringify({
 	}));
 	xhr.onload = function() {
@@ -77,6 +77,36 @@ function sendTebasTimestamp(){
 		alert("Tebas sync failed!");
 	}
 }
+
+// function sendTebasTimestamp(){
+    // var textBoxContent = document.getElementById('textbox').innerHTML;
+	// var url = new URL(window.location.href);
+	// var ref = url.searchParams.get("ref");
+	// console.log(ref);
+	// var resCode = ref.split("?")[0];
+	// console.log(resCode);
+	// var metadata = url.searchParams.get("metadata");
+	// var metadataCode = metadata.split("?")[0];
+	// console.log('Test envío: '+resCode );
+	// console.log('Test envío: '+metadataCode );
+	// var query = "user=admin&function="+"update_field&param1="+resCode+"&param2="+metadataCode+"&param3="+encodeURIComponent(textBoxContent)+"&param4=";
+	// console.log('Test envío: '+ "3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query);
+	// var sign = sha256("3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query).toString();
+	// console.log("SHA = "+ sign);
+	// var xhr = new XMLHttpRequest();
+	// xhr.open("GET", "http://trunk.tebascms.com/api/?"+query+"&sign="+sign, true);
+	
+	// xhr.send(JSON.stringify({
+	// }));
+	// xhr.onload = function() {
+		// alert("Tebas sync complete!");
+	// };
+	// xhr.onerror = function () {
+		// alert("Tebas sync failed!");
+	// }
+// }
+
+
 
 function createTimestampEl(time) {
     const timestamp = document.createElement('span');

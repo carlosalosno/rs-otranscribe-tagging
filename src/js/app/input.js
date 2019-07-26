@@ -131,18 +131,19 @@ export function hide(){
     $('.file-input-outer').removeClass('ext-input-active');
 };
 
-export function loadTebasURL(){
-	console.log("abro video de la url");
-	const baseURL = "http://tebas86.tebascms.com"
-	const str = window.location.href.toString();
-	const strArray = str.split("..");
-	const previewPath =baseURL+strArray[1];
-	console.log (previewPath);
-	//TODO sacar la url del ref y setearla aqui
-    inputGen.showURLInput();
-	optsGen.createFromURL(previewPath);
-	hide();
-}
+// He comentado esta funcion por que creo que no se usa y en su lugar se usa la funcion en el fichero init.js getPreviewURL () 
+// export function loadTebasURL(){
+	// console.log("abro video de la url");
+	// const baseURL = "http://trunk.tebascms.com"
+	// const str = window.location.href.toString();
+	// const strArray = str.split("..");
+	// const previewPath =baseURL+strArray[1];
+	// console.log (previewPath);
+	// //TODO sacar la url del ref y setearla aqui
+    // inputGen.showURLInput();
+	// optsGen.createFromURL(previewPath);
+	// hide();
+// }
 
 
 // oTinput module

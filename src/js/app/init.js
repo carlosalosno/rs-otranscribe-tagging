@@ -38,11 +38,15 @@ export default function init(){
 	
 	getPreviewURL();
 	
+	
 	function getPreviewURL () {
-		const baseURL = "http://tebas86.tebascms.com"
-		const str = window.location.href.toString();
-		const strArray = str.split("..");
-		const previewPath =baseURL+strArray[1];
+		// He cambiado esta funcion para que coja la URL base de tebas de la URL que hace la llamada a Minutado, he modificado el Plugin para que envie baseURL en la llamada a minutado
+		var url = new URL(window.location.href);
+		const baseURL = url.searchParams.get("baseurl").split("&")[0];
+		console.log(url.searchParams.get("video"));
+		//const str = window.location.href.toString();
+		//const strArray = url.searchParams.get("video").split("..")[1];
+		const previewPath =baseURL+url.searchParams.get("video").split("..")[1];
 		console.log (previewPath);
 		return previewPath;
 	}

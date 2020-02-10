@@ -55,8 +55,10 @@ function insertTimestamp(){
 }
 
 function sendTebasTimestamp(){
+	document.getElementById('loader').style.display="block";
     var textBoxContent = document.getElementById('textbox').innerHTML;
 	var url = new URL(window.location.href);
+	var baseurl = url.searchParams.get("baseurl");
 	var ref = url.searchParams.get("ref");
 	var metadata = url.searchParams.get("metadata");
 	var query = "user=admin&function="+"update_field&param1="+ref+"&param2="+metadata+"&param3="+encodeURIComponent(textBoxContent)+"&param4=";
@@ -64,14 +66,21 @@ function sendTebasTimestamp(){
 	var sign = sha256("3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query).toString();
 	//console.log("SHA = "+ sign);
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://trunk.tebascms.com/api/?"+query+"&sign="+sign, true);
-	
-	xhr.send(JSON.stringify({
-	}));
+	//xhr.open("GET", "http://trunk.tebascms.com/api/?"+query+"&sign="+sign, true);
+	var data = new FormData();
+	data.append('user', 'admin');
+	data.append('query', query+"&sign="+sign);
+	data.append('sign', sign);
+	xhr.open("POST", baseurl+"/api/", true);
+	//Send the proper header information along with the request
+	// xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.send(data);
 	xhr.onload = function() {
+		document.getElementById('loader').style.display="none";
 		alert("Tebas sync complete!");
 	};
 	xhr.onerror = function () {
+		document.getElementById('loader').style.display="none";
 		alert("Tebas sync failed!");
 	}
 }

@@ -81,14 +81,14 @@ function sendTebasTimestamp(){
 	var baseurl = url.searchParams.get("baseurl");
 	var ref = url.searchParams.get("ref");
 	var metadata = url.searchParams.get("metadata");
-	var query = "user=admin&function="+"update_field&param1="+ref+"&param2="+metadata+"&param3="+encodeURIComponent(textBoxContent)+"&param4=";
+	var query = "user=minutado&function="+"update_field&param1="+ref+"&param2="+metadata+"&param3="+encodeURIComponent(textBoxContent)+"&param4=";
 	//console.log('Test envío: '+ "3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query);
-	var sign = sha256("3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query).toString();
+	var sign = sha256("823c7868fdb2f380d9aae287d8a8140374a43cf82bf104a228356d58a0c0d33b"+query).toString();
 	//console.log("SHA = "+ sign);
 	var xhr = new XMLHttpRequest();
 	//xhr.open("GET", "http://trunk.tebascms.com/api/?"+query+"&sign="+sign, true);
 	var data = new FormData();
-	data.append('user', 'admin');
+	data.append('user', 'minutado');
 	data.append('query', query+"&sign="+sign);
 	data.append('sign', sign);
 	xhr.open("POST", baseurl+"/api/", true);

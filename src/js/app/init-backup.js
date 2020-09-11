@@ -4,7 +4,6 @@
 
 const $ = require('jquery');
 let otrQueryParams = {};
-var sha256 = require('js-sha256');
 
 import { watchFormatting, watchWordCount, initAutoscroll } from './texteditor';
 import { inputSetup, getQueryParams , loadTebasURL, hide as inputHide } from './input';
@@ -38,8 +37,8 @@ export default function init(){
     viewController.set('editor');
 	
 	getPreviewURL();
-
-
+	
+	
 	function getPreviewURL () {
 		// He cambiado esta funcion para que coja la URL base de tebas de la URL que hace la llamada a Minutado, he modificado el Plugin para que envie baseURL en la llamada a minutado
 		var url = new URL(window.location.href);
@@ -47,37 +46,9 @@ export default function init(){
 		//console.log(url.searchParams.get("video"));
 		const previewPath =baseURL+url.searchParams.get("video").split("..")[1];
 		//console.log (previewPath);
-		getMinutado();
 		return previewPath;
 	}
-
-	function getMinutado(){
-
-		var url = new URL(window.location.href);
-		var baseurl = url.searchParams.get("baseurl");
-		var ref = url.searchParams.get("ref");
-		var metadata = url.searchParams.get("metadata");
-		var query = "user=minutado&function="+"get_resource_field_data&param1="+ref;
-		var sign = sha256("823c7868fdb2f380d9aae287d8a8140374a43cf82bf104a228356d58a0c0d33b"+query).toString();
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET", baseurl+"/api/?"+query+"&sign="+sign, true);
-		xhr.send(JSON.stringify({}));
-		xhr.onload = function() {
-			var json = JSON.parse(xhr.responseText);
-			//console.log("Response JSON", json);
-			var i;
-			for(i = 0; i<json.length; i++){
-				if(json[i].ref===metadata){
-					document.getElementById('textbox').innerHTML= json[i].value;
-				}
-				activateTimestamps();
-			}
-		};
-		xhr.onerror = function () {
-			alert("Error");
-		}
-	}
-
+	
     // Gather query parameters into an object
     otrQueryParams = getQueryParams();
 

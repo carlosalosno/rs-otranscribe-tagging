@@ -15,17 +15,37 @@ function getTime(){
     };
 };
 
+// function formatMilliseconds(time) {
+    // const hours = Math.floor(time / 3600).toString();
+    // const minutes = ("0" + Math.floor(time / 60) % 60).slice(-2);
+    // const seconds = ("0" + Math.floor( time % 60 )).slice(-2);
+    // let formatted = minutes+":"+seconds;
+    // if (hours !== '0') {
+        // formatted = hours + ":" + minutes + ":" + seconds;
+    // }
+    // formatted = formatted.replace(/\s/g,'');
+    // return formatted;
+// }
+
 function formatMilliseconds(time) {
-    const hours = Math.floor(time / 3600).toString();
-    const minutes = ("0" + Math.floor(time / 60) % 60).slice(-2);
-    const seconds = ("0" + Math.floor( time % 60 )).slice(-2);
-    let formatted = minutes+":"+seconds;
-    if (hours !== '0') {
-        formatted = hours + ":" + minutes + ":" + seconds;
-    }
-    formatted = formatted.replace(/\s/g,'');
-    return formatted;
+        //alert(milliseconds);
+        var h = Math.floor(time / 3600);
+        time = time - h * 3600;
+        var m = Math.floor(time / 60);
+        time = time - m * 60;
+        var s = Math.floor(time);
+        time = time - s;
+        var f = Math.floor((time * 1000) / 40);
+        // Check if we need to show hours
+        h = (h < 10) ? ("0" + h) + ":" : h + ":";
+        // If hours are showing, we may need to add a leading zero. Always show at least one digit of minutes.
+        m = (((h) && m < 10) ? "0" + m : m) + ":";
+        // Check if leading zero is need for seconds
+        s = ((s < 10) ? "0" + s : s) + ":";
+        f = (f < 10) ? "0" + f : f;
+        return h + m + s + f;
 }
+
 
 // http://stackoverflow.com/a/25943182
 function insertHTML(newElement) {
@@ -55,23 +75,32 @@ function insertTimestamp(){
 }
 
 function sendTebasTimestamp(){
+	document.getElementById('loader').style.display="block";
     var textBoxContent = document.getElementById('textbox').innerHTML;
 	var url = new URL(window.location.href);
+	var baseurl = url.searchParams.get("baseurl");
 	var ref = url.searchParams.get("ref");
 	var metadata = url.searchParams.get("metadata");
-	var query = "user=admin&function="+"update_field&param1="+ref+"&param2="+metadata+"&param3="+encodeURIComponent(textBoxContent)+"&param4=";
+	var query = "user=minutado&function="+"update_field&param1="+ref+"&param2="+metadata+"&param3="+encodeURIComponent(textBoxContent)+"&param4=";
 	//console.log('Test envío: '+ "3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query);
-	var sign = sha256("3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query).toString();
+	var sign = sha256("823c7868fdb2f380d9aae287d8a8140374a43cf82bf104a228356d58a0c0d33b"+query).toString();
 	//console.log("SHA = "+ sign);
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://trunk.tebascms.com/api/?"+query+"&sign="+sign, true);
-	
-	xhr.send(JSON.stringify({
-	}));
+	//xhr.open("GET", "http://trunk.tebascms.com/api/?"+query+"&sign="+sign, true);
+	var data = new FormData();
+	data.append('user', 'minutado');
+	data.append('query', query+"&sign="+sign);
+	data.append('sign', sign);
+	xhr.open("POST", baseurl+"/api/", true);
+	//Send the proper header information along with the request
+	// xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.send(data);
 	xhr.onload = function() {
+		document.getElementById('loader').style.display="none";
 		alert("Tebas sync complete!");
 	};
 	xhr.onerror = function () {
+		document.getElementById('loader').style.display="none";
 		alert("Tebas sync failed!");
 	}
 }
@@ -123,10 +152,26 @@ window.ts = {
 
 function convertTimestampToSeconds(hms) {
     var a = hms.split(':');
+	console.log(a);
     if (a.length === 3) {
         return ((+a[0]) * 60 * 60) + (+a[1]) * 60 + (+a[2]);
     }
     return (+a[0]) * 60 + (+a[1]);
+}
+
+// function convertTimestampToSeconds(hms) {
+    // var a = hms.split(':');
+	// console.log(a);
+    // if (a.length === 3) {
+        // return ((+a[0]) * 60 * 60) + (+a[1]) * 60 + (+a[2]);
+    // }
+    // return (+a[0]) * 60 + (+a[1]);
+// }
+
+function convertTimestampToSeconds(hms) {
+    var a = hms.split(':');
+        return ((+a[0]) * 60 * 60) + (+a[1]) * 60 + (+a[2]) + (+a[3]) * 0.04;
+
 }
 
 export {activateTimestamps, insertTimestamp, sendTebasTimestamp, convertTimestampToSeconds, formatMilliseconds};

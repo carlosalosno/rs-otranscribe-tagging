@@ -83,7 +83,7 @@ function sendTebasTimestamp(){
 	var metadata = url.searchParams.get("metadata");
 	var query = "user=admin&function="+"update_field&param1="+ref+"&param2="+metadata+"&param3="+encodeURIComponent(textBoxContent)+"&param4=";
 	//console.log('Test envío: '+ "3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query);
-	var sign = sha256("cd66c09584b87c9fc7fbd6db4f0e1ac312c87f65cb3c39833fa1c2934047f098"+query).toString();
+	var sign = sha256("3f72166c57c0c6f7998425dadf5efacf4543964861089ee61863530d12b46b21"+query).toString();
 	//console.log("SHA = "+ sign);
 	var xhr = new XMLHttpRequest();
 	//xhr.open("GET", "http://trunk.tebascms.com/api/?"+query+"&sign="+sign, true);
@@ -152,10 +152,26 @@ window.ts = {
 
 function convertTimestampToSeconds(hms) {
     var a = hms.split(':');
+	console.log(a);
     if (a.length === 3) {
         return ((+a[0]) * 60 * 60) + (+a[1]) * 60 + (+a[2]);
     }
     return (+a[0]) * 60 + (+a[1]);
+}
+
+// function convertTimestampToSeconds(hms) {
+    // var a = hms.split(':');
+	// console.log(a);
+    // if (a.length === 3) {
+        // return ((+a[0]) * 60 * 60) + (+a[1]) * 60 + (+a[2]);
+    // }
+    // return (+a[0]) * 60 + (+a[1]);
+// }
+
+function convertTimestampToSeconds(hms) {
+    var a = hms.split(':');
+        return ((+a[0]) * 60 * 60) + (+a[1]) * 60 + (+a[2]) + (+a[3]) * 0.04;
+
 }
 
 export {activateTimestamps, insertTimestamp, sendTebasTimestamp, convertTimestampToSeconds, formatMilliseconds};

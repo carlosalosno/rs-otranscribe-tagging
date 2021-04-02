@@ -57,14 +57,15 @@ export default function init(){
 		var baseurl = url.searchParams.get("baseurl");
 		var ref = url.searchParams.get("ref");
 		var metadata = url.searchParams.get("metadata");
-		var query = "user=minutado&function="+"get_resource_field_data&param1="+ref;
-		var sign = sha256("823c7868fdb2f380d9aae287d8a8140374a43cf82bf104a228356d58a0c0d33b"+query).toString();
+		var query = "user=admin&function="+"get_resource_field_data&resource="+ref;
+		var sign = sha256("cd66c09584b87c9fc7fbd6db4f0e1ac312c87f65cb3c39833fa1c2934047f098"+query).toString();
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", baseurl+"/api/?"+query+"&sign="+sign, true);
+        xhr.open("GET", baseurl + "/api/?" + query + "&sign=" + sign, true);
+        console.log(xhr.responseText);
 		xhr.send(JSON.stringify({}));
 		xhr.onload = function() {
 			var json = JSON.parse(xhr.responseText);
-			//console.log("Response JSON", json);
+			// console.log("Response JSON", json);
 			var i;
 			for(i = 0; i<json.length; i++){
 				if(json[i].ref===metadata){
@@ -180,5 +181,4 @@ $(window).resize(function() {
         document.getElementById('media').style.width = oT.media.videoWidth();
     }
 });
-
 
